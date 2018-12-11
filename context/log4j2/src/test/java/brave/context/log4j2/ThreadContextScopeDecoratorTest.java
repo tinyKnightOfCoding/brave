@@ -34,12 +34,17 @@ public class ThreadContextScopeDecoratorTest extends CurrentTraceContextTest {
           .isEqualTo(parentId != 0L ? HexCodec.toLowerHex(parentId) : null);
       assertThat(ThreadContext.get("spanId"))
           .isEqualTo(HexCodec.toLowerHex(context.spanId()));
+      Boolean sampled = context.sampled();
+      assertThat(ThreadContext.get("sampled"))
+          .isEqualTo(sampled != null ? sampled.toString() : null);
     } else {
       assertThat(ThreadContext.get("traceId"))
           .isNull();
       assertThat(ThreadContext.get("parentId"))
           .isNull();
       assertThat(ThreadContext.get("spanId"))
+          .isNull();
+      assertThat(ThreadContext.get("sampled"))
           .isNull();
     }
   }
