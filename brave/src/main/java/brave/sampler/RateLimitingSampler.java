@@ -51,20 +51,17 @@ public class RateLimitingSampler extends Sampler {
   }
 
   @Override public boolean isSampled(long ignoredTraceId) {
-    long now = System.nanoTime();
-    long updateAt = nextReset.get();
+    long now = System.nanoTime(), updateAt = nextReset.get();
 
+    // First task is to determine if this request is later than the one second sampling window
     long nanosUntilReset = -(now - updateAt); // because nanoTime can be negative
     if (nanosUntilReset <= 0) {
       // Attempt to move into the next sampling interval.
-      // nanosUntilReset is now invalid regardless of race winner, so we can't sample based on it.
       if (nextReset.compareAndSet(updateAt, updateAt + NANOS_PER_SECOND)) usage.set(0);
-
-      // recurse as it is simpler than resetting all the locals.
-      // reset happens once per second, this code doesn't take a second, so no infinite recursion.
-      return isSampled(ignoredTraceId);
+      nanosUntilReset = NANOS_PER_SECOND - 1; // reset our timeout to the top of the interval
     }
 
+    // Now, we determine the amount of samples allowed for this interval, and sample accordingly
     int max = maxFunction.max(nanosUntilReset);
     int prev, next;
     do { // same form as java 8 AtomicLong.getAndUpdate
