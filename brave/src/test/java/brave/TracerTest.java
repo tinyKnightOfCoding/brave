@@ -558,6 +558,23 @@ public class TracerTest {
     }
   }
 
+  @Test public void setNoop_dropsDataButDoesntAffectSampling() {
+    ScopedSpan parent = tracer.startScopedSpan("parent");
+    try {
+      Tracing.current().setNoop(true);
+      Span child = tracer.newChild(parent.context());
+      child.finish();
+      assertThat(child.context().sampled()).isTrue();
+
+      Span root = tracer.newTrace();
+      root.finish();
+      assertThat(root.context().sampled()).isTrue();
+    } finally {
+      Tracing.current().setNoop(false);
+    }
+    assertThat(spans).isEmpty();
+  }
+
   @Test public void toString_whenNoop() {
     Tracing.current().setNoop(true);
 
