@@ -32,11 +32,7 @@ public class ITSpringRabbitTracing {
 
   @ClassRule public static BrokerRunning brokerRunning = BrokerRunning.isRunning();
 
-  static ITSpringAmqpTracingTestFixture testFixture;
-
-  @BeforeClass public static void setupTestFixture() {
-    testFixture = new ITSpringAmqpTracingTestFixture();
-  }
+  private ITSpringAmqpTracingTestFixture testFixture = new ITSpringAmqpTracingTestFixture();
 
   @AfterClass public static void close() {
     Tracing.current().close();
