@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.postprocessor.UnzipPostProcessor;
 import org.springframework.cache.interceptor.CacheInterceptor;
@@ -88,6 +89,13 @@ public class SpringRabbitTracingTest {
 
     assertThat(rabbitTracing.decorateDirectRabbitListenerContainerFactory(factory).getAdviceChain())
         .hasSize(1);
+  }
+
+  @Test public void newDirectRabbitListenerContainerFactory_has_advice() {
+    DirectRabbitListenerContainerFactory factory = rabbitTracing.newDirectRabbitListenerContainerFactory(mock(ConnectionFactory.class));
+    assertThat(factory.getAdviceChain())
+        .hasSize(1)
+        .hasOnlyElementsOfType(TracingRabbitListenerAdvice.class);
   }
 
   @Test public void decorateSimpleRabbitListenerContainerFactory_appends_when_absent() {

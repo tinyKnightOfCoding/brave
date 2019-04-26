@@ -164,6 +164,16 @@ public final class SpringRabbitTracing {
     return factory;
   }
 
+  /** Creates an instrumented {@linkplain DirectRabbitListenerContainerFactory} */
+  public DirectRabbitListenerContainerFactory newDirectRabbitListenerContainerFactory(
+      ConnectionFactory connectionFactory
+  ) {
+    DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
+    factory.setConnectionFactory(connectionFactory);
+    factory.setAdviceChain(new TracingRabbitListenerAdvice(this));
+    return factory;
+  }
+
   /** Instruments an existing {@linkplain SimpleRabbitListenerContainerFactory} */
   public SimpleRabbitListenerContainerFactory decorateSimpleRabbitListenerContainerFactory(
       SimpleRabbitListenerContainerFactory factory
