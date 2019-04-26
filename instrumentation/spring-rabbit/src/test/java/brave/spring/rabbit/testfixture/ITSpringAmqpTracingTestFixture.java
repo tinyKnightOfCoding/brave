@@ -1,4 +1,4 @@
-package brave.spring.rabbit;
+package brave.spring.rabbit.testfixture;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.context.ApplicationContext;
@@ -7,20 +7,20 @@ import zipkin2.Span;
 
 import java.util.concurrent.BlockingQueue;
 
-class ITSpringAmqpTracingTestFixture {
+public class ITSpringAmqpTracingTestFixture {
   ApplicationContext producerContext;
   ApplicationContext consumerContext;
-  BlockingQueue<Span> producerSpans;
-  BlockingQueue<Span> consumerSpans;
+  public BlockingQueue<Span> producerSpans;
+  public BlockingQueue<Span> consumerSpans;
 
-  ITSpringAmqpTracingTestFixture() {
+  public ITSpringAmqpTracingTestFixture() {
     producerContext = producerSpringContext();
     consumerContext = consumerSpringContext();
     producerSpans = (BlockingQueue<Span>) producerContext.getBean("producerSpans");
     consumerSpans = (BlockingQueue<Span>) consumerContext.getBean("consumerSpans");
   }
 
-  void reset() {
+  public void reset() {
     HelloWorldConsumer consumer = consumerContext.getBean(HelloWorldConsumer.class);
     consumer.reset();
     producerSpans.clear();
@@ -42,24 +42,24 @@ class ITSpringAmqpTracingTestFixture {
     return createContext(CommonRabbitConfig.class, RabbitConsumerConfig.class);
   }
 
-  void produceMessage() {
+  public void produceMessage() {
     HelloWorldProducer rabbitProducer =
         producerContext.getBean("tracingRabbitProducer_new", HelloWorldProducer.class);
     rabbitProducer.send();
   }
 
-  void produceMessageFromDefault() {
+  public void produceMessageFromDefault() {
     HelloWorldProducer rabbitProducer =
         producerContext.getBean("tracingRabbitProducer_decorate", HelloWorldProducer.class);
     rabbitProducer.send();
   }
 
-  void awaitMessageConsumed() throws InterruptedException {
+  public void awaitMessageConsumed() throws InterruptedException {
     HelloWorldConsumer consumer = consumerContext.getBean(HelloWorldConsumer.class);
     consumer.getCountDownLatch().await();
   }
 
-  Message capturedMessage() {
+  public Message capturedMessage() {
     HelloWorldConsumer consumer = consumerContext.getBean(HelloWorldConsumer.class);
     return consumer.capturedMessage;
   }

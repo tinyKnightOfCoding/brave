@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import brave.spring.rabbit.testfixture.ITSpringAmqpTracingTestFixture;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

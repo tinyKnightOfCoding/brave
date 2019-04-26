@@ -1,4 +1,4 @@
-package brave.spring.rabbit;
+package brave.spring.rabbit.testfixture;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;

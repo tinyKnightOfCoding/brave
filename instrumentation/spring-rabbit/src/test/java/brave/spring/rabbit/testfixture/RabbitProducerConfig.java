@@ -1,8 +1,9 @@
-package brave.spring.rabbit;
+package brave.spring.rabbit.testfixture;
 
 import brave.Tracing;
 import brave.propagation.StrictScopeDecorator;
 import brave.propagation.ThreadLocalCurrentTraceContext;
+import brave.spring.rabbit.SpringRabbitTracing;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
