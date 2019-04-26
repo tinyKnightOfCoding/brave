@@ -16,6 +16,7 @@ import org.aopalliance.aop.Advice;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -184,11 +185,40 @@ public final class SpringRabbitTracing {
     }
 
     // Otherwise, add ours and return
+    factory.setAdviceChain(padChain(chain, tracingAdvice));
+    return factory;
+  }
+
+  /** Instruments an existing {@linkplain DirectRabbitListenerContainerFactory} */
+  public DirectRabbitListenerContainerFactory decorateDirectRabbitListenerContainerFactory(
+      DirectRabbitListenerContainerFactory factory
+  ) {
+    Advice[] chain = factory.getAdviceChain();
+
+    TracingRabbitListenerAdvice tracingAdvice = new TracingRabbitListenerAdvice(this);
+    // If there are no existing advice, return only the tracing one
+    if (chain == null) {
+      factory.setAdviceChain(tracingAdvice);
+      return factory;
+    }
+
+    // If there is an existing tracing advice return
+    for (Advice advice : chain) {
+      if (advice instanceof TracingRabbitListenerAdvice) {
+        return factory;
+      }
+    }
+
+    // Otherwise, add ours and return
+    factory.setAdviceChain(padChain(chain, tracingAdvice));
+    return factory;
+  }
+
+  private Advice[] padChain(Advice[] chain, TracingRabbitListenerAdvice tracingAdvice) {
     Advice[] newChain = new Advice[chain.length + 1];
     System.arraycopy(chain, 0, newChain, 0, chain.length);
     newChain[chain.length] = tracingAdvice;
-    factory.setAdviceChain(newChain);
-    return factory;
+    return newChain;
   }
 
   TraceContextOrSamplingFlags extractAndClearHeaders(Message message) {

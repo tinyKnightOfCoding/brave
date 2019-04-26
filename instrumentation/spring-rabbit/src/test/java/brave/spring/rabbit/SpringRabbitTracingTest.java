@@ -7,6 +7,7 @@ import brave.propagation.TraceContextOrSamplingFlags;
 import java.util.Collection;
 import org.junit.After;
 import org.junit.Test;
+import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.postprocessor.UnzipPostProcessor;
@@ -66,11 +67,26 @@ public class SpringRabbitTracingTest {
         .allMatch(advice -> advice instanceof TracingRabbitListenerAdvice);
   }
 
+  @Test public void decorateDirectRabbitListenerContainerFactory_adds_by_default() {
+    DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
+
+    assertThat(rabbitTracing.decorateDirectRabbitListenerContainerFactory(factory).getAdviceChain())
+        .allMatch(advice -> advice instanceof TracingRabbitListenerAdvice);
+  }
+
   @Test public void decorateSimpleRabbitListenerContainerFactory_skips_when_present() {
     SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
     factory.setAdviceChain(new TracingRabbitListenerAdvice(rabbitTracing));
 
     assertThat(rabbitTracing.decorateSimpleRabbitListenerContainerFactory(factory).getAdviceChain())
+        .hasSize(1);
+  }
+
+  @Test public void decorateDirectRabbitListenerContainerFactory_skips_when_present() {
+    DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
+    factory.setAdviceChain(new TracingRabbitListenerAdvice(rabbitTracing));
+
+    assertThat(rabbitTracing.decorateDirectRabbitListenerContainerFactory(factory).getAdviceChain())
         .hasSize(1);
   }
 
