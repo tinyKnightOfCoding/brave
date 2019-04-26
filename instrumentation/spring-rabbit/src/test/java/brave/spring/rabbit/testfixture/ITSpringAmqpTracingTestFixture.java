@@ -14,9 +14,9 @@ public class ITSpringAmqpTracingTestFixture {
   private BlockingQueue<Span> producerSpans;
   private BlockingQueue<Span> consumerSpans;
 
-  public ITSpringAmqpTracingTestFixture() {
+  public ITSpringAmqpTracingTestFixture(Class<?> factoryConfigClass) {
     producerContext = producerSpringContext();
-    consumerContext = consumerSpringContext();
+    consumerContext = consumerSpringContext(factoryConfigClass);
     producerSpans = (BlockingQueue<Span>) producerContext.getBean("producerSpans");
     consumerSpans = (BlockingQueue<Span>) consumerContext.getBean("consumerSpans");
   }
@@ -39,8 +39,8 @@ public class ITSpringAmqpTracingTestFixture {
     return producerContext;
   }
 
-  private ApplicationContext consumerSpringContext() {
-    return createContext(CommonRabbitConfig.class, RabbitConsumerConfig.class);
+  private ApplicationContext consumerSpringContext(Class<?> factoryConfigClass) {
+    return createContext(CommonRabbitConfig.class, RabbitConsumerConfig.class, factoryConfigClass);
   }
 
   public void produceMessage() {

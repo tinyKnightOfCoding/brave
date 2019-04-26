@@ -16,7 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 @EnableRabbit
 @Configuration
-class RabbitConsumerConfig {
+public class RabbitConsumerConfig {
   @Bean
   public Tracing tracing(BlockingQueue<Span> consumerSpans) {
     return Tracing.newBuilder()
@@ -36,19 +36,6 @@ class RabbitConsumerConfig {
   @Bean
   public BlockingQueue<Span> consumerSpans() {
     return new LinkedBlockingQueue<>();
-  }
-
-  @Bean
-  public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
-      ConnectionFactory connectionFactory,
-      SpringRabbitTracing springRabbitTracing
-  ) {
-    SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory =
-        new SimpleRabbitListenerContainerFactory();
-    rabbitListenerContainerFactory.setConnectionFactory(connectionFactory);
-    return springRabbitTracing.decorateSimpleRabbitListenerContainerFactory(
-        rabbitListenerContainerFactory
-    );
   }
 
   @Bean
