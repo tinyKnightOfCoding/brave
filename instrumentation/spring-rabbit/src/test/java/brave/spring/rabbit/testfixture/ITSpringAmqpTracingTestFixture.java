@@ -6,12 +6,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import zipkin2.Span;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class ITSpringAmqpTracingTestFixture {
-  ApplicationContext producerContext;
-  ApplicationContext consumerContext;
-  public BlockingQueue<Span> producerSpans;
-  public BlockingQueue<Span> consumerSpans;
+  private ApplicationContext producerContext;
+  private ApplicationContext consumerContext;
+  private BlockingQueue<Span> producerSpans;
+  private BlockingQueue<Span> consumerSpans;
 
   public ITSpringAmqpTracingTestFixture() {
     producerContext = producerSpringContext();
@@ -62,5 +63,13 @@ public class ITSpringAmqpTracingTestFixture {
   public Message capturedMessage() {
     HelloWorldConsumer consumer = consumerContext.getBean(HelloWorldConsumer.class);
     return consumer.capturedMessage;
+  }
+
+  public Span nextProducerSpan(int timeoutInSeconds) throws InterruptedException {
+    return producerSpans.poll(timeoutInSeconds, TimeUnit.SECONDS);
+  }
+
+  public Span nextConsumerSpan(int timeoutInSeconds) throws InterruptedException {
+    return consumerSpans.poll(timeoutInSeconds, TimeUnit.SECONDS);
   }
 }

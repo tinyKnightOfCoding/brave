@@ -5,7 +5,6 @@ import brave.Tracing;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import brave.spring.rabbit.testfixture.ITSpringAmqpTracingTestFixture;
 import org.junit.AfterClass;
@@ -169,7 +168,7 @@ public class ITSpringRabbitTracing {
 
   /** Call this to block until a span was reported */
   Span takeProducerSpan() throws InterruptedException {
-    Span result = testFixture.producerSpans.poll(3, TimeUnit.SECONDS);
+    Span result = testFixture.nextProducerSpan(3);
     assertThat(result)
         .withFailMessage("Producer span was not reported")
         .isNotNull();
@@ -180,7 +179,7 @@ public class ITSpringRabbitTracing {
 
   /** Call this to block until a span was reported */
   Span takeConsumerSpan() throws InterruptedException {
-    Span result = testFixture.consumerSpans.poll(3, TimeUnit.SECONDS);
+    Span result = testFixture.nextConsumerSpan(3);
     assertThat(result)
         .withFailMessage("Consumer span was not reported")
         .isNotNull();
@@ -188,4 +187,5 @@ public class ITSpringRabbitTracing {
     assertThat(result.durationAsLong()).isPositive();
     return result;
   }
+
 }
