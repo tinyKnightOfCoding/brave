@@ -4,16 +4,15 @@ import brave.Tracing;
 import brave.propagation.Propagation;
 import brave.propagation.ThreadLocalCurrentTraceContext;
 import brave.propagation.TraceContextOrSamplingFlags;
-import java.util.Collection;
 import org.junit.After;
 import org.junit.Test;
-import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.postprocessor.UnzipPostProcessor;
 import org.springframework.cache.interceptor.CacheInterceptor;
 import zipkin2.reporter.Reporter;
+
+import java.util.Collection;
 
 import static brave.spring.rabbit.SpringRabbitPropagation.GETTER;
 import static org.assertj.core.api.Assertions.assertThat;

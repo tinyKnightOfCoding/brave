@@ -3,7 +3,6 @@ package brave.spring.rabbit;
 import brave.spring.rabbit.testfixture.DirectRabbitListenerContainerFactoryConfig;
 import brave.spring.rabbit.testfixture.ITSpringAmqpTracingTestFixture;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
 public class ITSpringRabbitTracingWithDirectRabbitListenerContainerFactory extends ITSpringRabbitTracingBase {
 
