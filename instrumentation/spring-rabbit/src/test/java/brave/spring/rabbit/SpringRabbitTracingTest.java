@@ -68,34 +68,12 @@ public class SpringRabbitTracingTest {
         .allMatch(advice -> advice instanceof TracingRabbitListenerAdvice);
   }
 
-  @Test public void decorateDirectRabbitListenerContainerFactory_adds_by_default() {
-    DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
-
-    assertThat(rabbitTracing.decorateDirectRabbitListenerContainerFactory(factory).getAdviceChain())
-        .allMatch(advice -> advice instanceof TracingRabbitListenerAdvice);
-  }
-
   @Test public void decorateSimpleRabbitListenerContainerFactory_skips_when_present() {
     SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
     factory.setAdviceChain(new TracingRabbitListenerAdvice(rabbitTracing));
 
     assertThat(rabbitTracing.decorateSimpleRabbitListenerContainerFactory(factory).getAdviceChain())
         .hasSize(1);
-  }
-
-  @Test public void decorateDirectRabbitListenerContainerFactory_skips_when_present() {
-    DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
-    factory.setAdviceChain(new TracingRabbitListenerAdvice(rabbitTracing));
-
-    assertThat(rabbitTracing.decorateDirectRabbitListenerContainerFactory(factory).getAdviceChain())
-        .hasSize(1);
-  }
-
-  @Test public void newDirectRabbitListenerContainerFactory_has_advice() {
-    DirectRabbitListenerContainerFactory factory = rabbitTracing.newDirectRabbitListenerContainerFactory(mock(ConnectionFactory.class));
-    assertThat(factory.getAdviceChain())
-        .hasSize(1)
-        .hasOnlyElementsOfType(TracingRabbitListenerAdvice.class);
   }
 
   @Test public void decorateSimpleRabbitListenerContainerFactory_appends_when_absent() {

@@ -11,7 +11,6 @@ import org.aopalliance.aop.Advice;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
-import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -165,44 +164,9 @@ public final class SpringRabbitTracing {
     return factory;
   }
 
-  /** Creates an instrumented {@linkplain DirectRabbitListenerContainerFactory} */
-  public DirectRabbitListenerContainerFactory newDirectRabbitListenerContainerFactory(
-      ConnectionFactory connectionFactory
-  ) {
-    DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
-    factory.setConnectionFactory(connectionFactory);
-    factory.setAdviceChain(new TracingRabbitListenerAdvice(this));
-    return factory;
-  }
-
   /** Instruments an existing {@linkplain SimpleRabbitListenerContainerFactory} */
   public SimpleRabbitListenerContainerFactory decorateSimpleRabbitListenerContainerFactory(
       SimpleRabbitListenerContainerFactory factory
-  ) {
-    Advice[] chain = factory.getAdviceChain();
-
-    TracingRabbitListenerAdvice tracingAdvice = new TracingRabbitListenerAdvice(this);
-    // If there are no existing advice, return only the tracing one
-    if (chain == null) {
-      factory.setAdviceChain(tracingAdvice);
-      return factory;
-    }
-
-    // If there is an existing tracing advice return
-    for (Advice advice : chain) {
-      if (advice instanceof TracingRabbitListenerAdvice) {
-        return factory;
-      }
-    }
-
-    // Otherwise, add ours and return
-    factory.setAdviceChain(padChain(chain, tracingAdvice));
-    return factory;
-  }
-
-  /** Instruments an existing {@linkplain DirectRabbitListenerContainerFactory} */
-  public DirectRabbitListenerContainerFactory decorateDirectRabbitListenerContainerFactory(
-      DirectRabbitListenerContainerFactory factory
   ) {
     Advice[] chain = factory.getAdviceChain();
 

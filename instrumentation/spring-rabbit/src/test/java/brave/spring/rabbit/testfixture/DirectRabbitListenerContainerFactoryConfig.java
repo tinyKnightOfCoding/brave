@@ -1,5 +1,6 @@
 package brave.spring.rabbit.testfixture;
 
+import brave.spring.rabbit.SpringDirectRabbitListenerContainerFactoryTracing;
 import brave.spring.rabbit.SpringRabbitTracing;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
@@ -12,14 +13,19 @@ import org.springframework.context.annotation.Configuration;
 public class DirectRabbitListenerContainerFactoryConfig {
 
   @Bean
+  public SpringDirectRabbitListenerContainerFactoryTracing springDirectRabbitListenerContainerFactoryTracing(SpringRabbitTracing springRabbitTracing) {
+    return new SpringDirectRabbitListenerContainerFactoryTracing(springRabbitTracing);
+  }
+
+  @Bean
   public DirectRabbitListenerContainerFactory rabbitListenerContainerFactory(
       ConnectionFactory connectionFactory,
-      SpringRabbitTracing springRabbitTracing
+      SpringDirectRabbitListenerContainerFactoryTracing springDirectRabbitListenerContainerFactoryTracing
   ) {
     DirectRabbitListenerContainerFactory rabbitListenerContainerFactory =
         new DirectRabbitListenerContainerFactory();
     rabbitListenerContainerFactory.setConnectionFactory(connectionFactory);
-    return springRabbitTracing.decorateDirectRabbitListenerContainerFactory(rabbitListenerContainerFactory
+    return springDirectRabbitListenerContainerFactoryTracing.decorateDirectRabbitListenerContainerFactory(rabbitListenerContainerFactory
     );
   }
 }
