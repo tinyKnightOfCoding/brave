@@ -1,6 +1,6 @@
 package brave.springrabbit17;
 
-import brave.spring.rabbit.ITSpringRabbitTracing;
+import brave.spring.rabbit.ITSpringRabbitTracingWithSimpleRabbitListenerContainerFactory;
 
-public class ITSpringRabbit17 extends ITSpringRabbitTracing {
+public class ITSpringRabbit17 extends ITSpringRabbitTracingWithSimpleRabbitListenerContainerFactory {
 }

@@ -76,7 +76,7 @@
           <excludes>
             <!-- -->
             <exclude>**/SpringRabbitTracing*.java</exclude>
-            <exclude>**/ITSpringRabbitTracing2*.java</exclude>
+            <exclude>**/ITSpringRabbitTracingWithDirectRabbitListenerContainerFactory*.java</exclude>
             <exclude>**/DirectRabbitListenerContainerFactoryConfig*.java</exclude>
           </excludes>
         </configuration>

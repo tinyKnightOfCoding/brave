@@ -68,6 +68,7 @@
     <zipkin-reporter.version>2.8.1</zipkin-reporter.version>
 
     <!-- Ensure older versions of spring still work -->
+    <spring5.version>5.1.6.RELEASE</spring5.version>
     <spring4.version>4.3.22.RELEASE</spring4.version>
     <spring.version>3.2.18.RELEASE</spring.version>
 
@@ -81,7 +82,7 @@
     <!-- must align with kafka version https://github.com/charithe/kafka-junit -->
     <kafka-junit.version>4.1.5</kafka-junit.version>
     <activemq.version>5.15.8</activemq.version>
-    <spring-rabbit.version>2.0.12.RELEASE</spring-rabbit.version>
+    <spring-rabbit.version>2.1.5.RELEASE</spring-rabbit.version>
 
     <finagle.version>19.2.0</finagle.version>
     <log4j.version>2.11.2</log4j.version>

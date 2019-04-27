@@ -1,8 +1,10 @@
 package brave.spring.rabbit;
 
-import brave.Tracing;
 import brave.spring.rabbit.testfixture.ITSpringAmqpTracingTestFixture;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TestName;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.junit.BrokerRunning;
@@ -20,21 +22,18 @@ import static org.assertj.core.groups.Tuple.tuple;
 import static zipkin2.Span.Kind.CONSUMER;
 import static zipkin2.Span.Kind.PRODUCER;
 
-public class ITSpringRabbitTracingBase {
+public abstract class ITSpringRabbitTracingBase {
+
   @ClassRule
   public static BrokerRunning brokerRunning = BrokerRunning.isRunning();
+
   @Rule
   public TestName testName = new TestName();
 
   private final ITSpringAmqpTracingTestFixture testFixture;
 
-  public ITSpringRabbitTracingBase(ITSpringAmqpTracingTestFixture testFixture) {
+  ITSpringRabbitTracingBase(ITSpringAmqpTracingTestFixture testFixture) {
     this.testFixture = testFixture;
-  }
-
-  @AfterClass
-  public static void close() {
-    Tracing.current().close();
   }
 
   @Before

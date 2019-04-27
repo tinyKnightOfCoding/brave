@@ -1,11 +1,20 @@
 package brave.spring.rabbit;
 
+import brave.spring.rabbit.testfixture.DirectRabbitListenerContainerFactoryConfig;
 import brave.spring.rabbit.testfixture.ITSpringAmqpTracingTestFixture;
-import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 public class ITSpringRabbitTracingWithDirectRabbitListenerContainerFactory extends ITSpringRabbitTracingBase {
 
+  public static final ITSpringAmqpTracingTestFixture TEST_FIXTURE = new ITSpringAmqpTracingTestFixture(DirectRabbitListenerContainerFactoryConfig.class);
+
+  @AfterClass
+  public static void tearDown() {
+    TEST_FIXTURE.close();
+  }
+
   public ITSpringRabbitTracingWithDirectRabbitListenerContainerFactory() {
-    super(new ITSpringAmqpTracingTestFixture(DirectRabbitListenerContainerFactory.class));
+    super(TEST_FIXTURE);
   }
 }
