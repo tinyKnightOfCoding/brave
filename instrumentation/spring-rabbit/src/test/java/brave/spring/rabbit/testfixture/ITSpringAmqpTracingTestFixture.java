@@ -2,6 +2,7 @@ package brave.spring.rabbit.testfixture;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import zipkin2.Span;
 
@@ -9,8 +10,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class ITSpringAmqpTracingTestFixture {
-  private ApplicationContext producerContext;
-  private ApplicationContext consumerContext;
+  private ConfigurableApplicationContext producerContext;
+  private ConfigurableApplicationContext consumerContext;
   private BlockingQueue<Span> producerSpans;
   private BlockingQueue<Span> consumerSpans;
 
@@ -28,18 +29,23 @@ public class ITSpringAmqpTracingTestFixture {
     consumerSpans.clear();
   }
 
-  private ApplicationContext producerSpringContext() {
+  public void close() {
+    producerContext.close();
+    consumerContext.close();
+  }
+
+  private ConfigurableApplicationContext producerSpringContext() {
     return createContext(CommonRabbitConfig.class, RabbitProducerConfig.class);
   }
 
-  private ApplicationContext createContext(Class... configurationClasses) {
+  private ConfigurableApplicationContext createContext(Class... configurationClasses) {
     AnnotationConfigApplicationContext producerContext = new AnnotationConfigApplicationContext();
     producerContext.register(configurationClasses);
     producerContext.refresh();
     return producerContext;
   }
 
-  private ApplicationContext consumerSpringContext(Class<?> factoryConfigClass) {
+  private ConfigurableApplicationContext consumerSpringContext(Class<?> factoryConfigClass) {
     return createContext(CommonRabbitConfig.class, RabbitConsumerConfig.class, factoryConfigClass);
   }
 
