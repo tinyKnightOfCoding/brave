@@ -169,24 +169,21 @@ public final class SpringRabbitTracing {
       SimpleRabbitListenerContainerFactory factory
   ) {
     Advice[] chain = factory.getAdviceChain();
-
-    TracingRabbitListenerAdvice tracingAdvice = new TracingRabbitListenerAdvice(this);
-    // If there are no existing advice, return only the tracing one
-    if (chain == null) {
-      factory.setAdviceChain(tracingAdvice);
-      return factory;
+    if (chain != null) {
+      factory.setAdviceChain(padWithTracingAdviceIfNotPresentYet(chain));
+    } else {
+      factory.setAdviceChain(new TracingRabbitListenerAdvice(this));
     }
+    return factory;
+  }
 
-    // If there is an existing tracing advice return
-    for (Advice advice : chain) {
-      if (advice instanceof TracingRabbitListenerAdvice) {
-        return factory;
+  Advice[] padWithTracingAdviceIfNotPresentYet(Advice[] chain) {
+    for(Advice advice : chain) {
+      if(advice instanceof TracingRabbitListenerAdvice) {
+        return chain;
       }
     }
-
-    // Otherwise, add ours and return
-    factory.setAdviceChain(padChain(chain, tracingAdvice));
-    return factory;
+    return padChain(chain, new TracingRabbitListenerAdvice(this));
   }
 
   private Advice[] padChain(Advice[] chain, TracingRabbitListenerAdvice tracingAdvice) {
