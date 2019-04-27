@@ -44,7 +44,7 @@ public abstract class ITSpringRabbitTracingBase {
   @Test
   public void propagates_trace_info_across_amqp_from_producer() throws Exception {
     testFixture.produceMessage();
-    testFixture.awaitMessageConsumed();
+    testFixture.awaitMessageConsumed(3);
 
     List<Span> allSpans = new ArrayList<>();
     allSpans.add(takeProducerSpan());
@@ -66,7 +66,7 @@ public abstract class ITSpringRabbitTracingBase {
   @Test
   public void clears_message_headers_after_propagation() throws Exception {
     testFixture.produceMessage();
-    testFixture.awaitMessageConsumed();
+    testFixture.awaitMessageConsumed(3);
 
     Message capturedMessage = testFixture.capturedMessage();
     Map<String, Object> headers = capturedMessage.getMessageProperties().getHeaders();
@@ -76,7 +76,7 @@ public abstract class ITSpringRabbitTracingBase {
   @Test
   public void tags_spans_with_exchange_and_routing_key() throws Exception {
     testFixture.produceMessage();
-    testFixture.awaitMessageConsumed();
+    testFixture.awaitMessageConsumed(3);
 
     List<Span> consumerSpans = new ArrayList<>();
     consumerSpans.add(takeConsumerSpan());
@@ -103,7 +103,7 @@ public abstract class ITSpringRabbitTracingBase {
   @Test
   public void listenerSpanHappensAfterConsumerSpan() throws Exception {
     testFixture.produceMessage();
-    testFixture.awaitMessageConsumed();
+    testFixture.awaitMessageConsumed(3);
 
     Span span1 = takeConsumerSpan(), span2 = takeConsumerSpan();
     Span consumerSpan = span1.kind() == Span.Kind.CONSUMER ? span1 : span2;
@@ -116,7 +116,7 @@ public abstract class ITSpringRabbitTracingBase {
   @Test
   public void creates_dependency_links() throws Exception {
     testFixture.produceMessage();
-    testFixture.awaitMessageConsumed();
+    testFixture.awaitMessageConsumed(3);
 
     List<Span> allSpans = new ArrayList<>();
     allSpans.add(takeProducerSpan());
@@ -133,7 +133,7 @@ public abstract class ITSpringRabbitTracingBase {
   @Test
   public void tags_spans_with_exchange_and_routing_key_from_default() throws Exception {
     testFixture.produceMessageFromDefault();
-    testFixture.awaitMessageConsumed();
+    testFixture.awaitMessageConsumed(3);
 
     List<Span> consumerSpans = new ArrayList<>();
     consumerSpans.add(takeProducerSpan());
@@ -158,7 +158,7 @@ public abstract class ITSpringRabbitTracingBase {
   @Test
   public void method_names_as_span_names() throws Exception {
     testFixture.produceMessage();
-    testFixture.awaitMessageConsumed();
+    testFixture.awaitMessageConsumed(3);
 
     List<Span> allSpans = new ArrayList<>();
     allSpans.add(takeProducerSpan());

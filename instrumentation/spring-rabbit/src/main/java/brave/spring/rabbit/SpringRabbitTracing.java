@@ -7,11 +7,6 @@ import brave.propagation.TraceContext;
 import brave.propagation.TraceContext.Extractor;
 import brave.propagation.TraceContext.Injector;
 import brave.propagation.TraceContextOrSamplingFlags;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import org.aopalliance.aop.Advice;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -20,6 +15,12 @@ import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFacto
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import static brave.spring.rabbit.SpringRabbitPropagation.B3_SINGLE_TEST_HEADERS;
 import static brave.spring.rabbit.SpringRabbitPropagation.TEST_CONTEXT;

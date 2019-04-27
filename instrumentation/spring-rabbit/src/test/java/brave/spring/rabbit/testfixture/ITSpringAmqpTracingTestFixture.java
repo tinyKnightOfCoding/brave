@@ -1,7 +1,6 @@
 package brave.spring.rabbit.testfixture;
 
 import org.springframework.amqp.core.Message;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import zipkin2.Span;
@@ -61,9 +60,9 @@ public class ITSpringAmqpTracingTestFixture {
     rabbitProducer.send();
   }
 
-  public void awaitMessageConsumed() throws InterruptedException {
+  public void awaitMessageConsumed(int timeoutInSeconds) throws InterruptedException {
     HelloWorldConsumer consumer = consumerContext.getBean(HelloWorldConsumer.class);
-    consumer.getCountDownLatch().await();
+    consumer.getCountDownLatch().await(timeoutInSeconds, TimeUnit.SECONDS);
   }
 
   public Message capturedMessage() {
