@@ -6,7 +6,7 @@ import org.junit.AfterClass;
 
 public class ITSpringRabbitTracingWithDirectRabbitListenerContainerFactory extends ITSpringRabbitTracingBase {
 
-  public static final ITSpringAmqpTracingTestFixture TEST_FIXTURE = new ITSpringAmqpTracingTestFixture(DirectRabbitListenerContainerFactoryConfig.class);
+  private static final ITSpringAmqpTracingTestFixture TEST_FIXTURE = new ITSpringAmqpTracingTestFixture(DirectRabbitListenerContainerFactoryConfig.class);
 
   @AfterClass
   public static void tearDown() {
