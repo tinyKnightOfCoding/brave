@@ -80,7 +80,7 @@ public class TracingMessagePostProcessorTest {
     Message postProcessMessage = tracingMessagePostProcessor.postProcessMessage(message);
 
     assertThat(postProcessMessage.getMessageProperties().getHeaders())
-      .containsOnlyKeys("b3");
+        .containsOnlyKeys("b3");
     assertThat(postProcessMessage.getMessageProperties().getHeaders().get("b3").toString())
         .matches("^[0-9a-f]{16}-[0-9a-f]{16}-1$");
   }

@@ -177,8 +177,8 @@ public final class SpringRabbitTracing {
   }
 
   Advice[] padWithTracingAdviceIfNotPresentYet(Advice[] chain) {
-    for(Advice advice : chain) {
-      if(advice instanceof TracingRabbitListenerAdvice) {
+    for (Advice advice : chain) {
+      if (advice instanceof TracingRabbitListenerAdvice) {
         return chain;
       }
     }

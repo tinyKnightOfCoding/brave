@@ -18,7 +18,8 @@ public class SpringDirectRabbitListenerContainerFactoryTracingTest {
       .spanReporter(Reporter.NOOP)
       .build();
   private final SpringRabbitTracing springRabbitTracing = SpringRabbitTracing.create(tracing);
-  private final SpringDirectRabbitListenerContainerFactoryTracing testee = new SpringDirectRabbitListenerContainerFactoryTracing(springRabbitTracing);
+  private final SpringDirectRabbitListenerContainerFactoryTracing testee =
+      new SpringDirectRabbitListenerContainerFactoryTracing(springRabbitTracing);
 
   @After
   public void close() {
@@ -42,7 +43,8 @@ public class SpringDirectRabbitListenerContainerFactoryTracingTest {
   }
 
   @Test public void newDirectRabbitListenerContainerFactory_has_advice() {
-    DirectRabbitListenerContainerFactory factory = testee.newDirectRabbitListenerContainerFactory(mock(ConnectionFactory.class));
+    DirectRabbitListenerContainerFactory factory =
+        testee.newDirectRabbitListenerContainerFactory(mock(ConnectionFactory.class));
     assertThat(factory.getAdviceChain())
         .hasSize(1)
         .hasOnlyElementsOfType(TracingRabbitListenerAdvice.class);

@@ -4,9 +4,11 @@ import brave.spring.rabbit.testfixture.DirectRabbitListenerContainerFactoryConfi
 import brave.spring.rabbit.testfixture.ITSpringAmqpTracingTestFixture;
 import org.junit.AfterClass;
 
-public class ITSpringRabbitTracingWithDirectRabbitListenerContainerFactory extends ITSpringRabbitTracingBase {
+public class ITSpringRabbitTracingWithDirectRabbitListenerContainerFactory
+    extends ITSpringRabbitTracingBase {
 
-  private static final ITSpringAmqpTracingTestFixture TEST_FIXTURE = new ITSpringAmqpTracingTestFixture(DirectRabbitListenerContainerFactoryConfig.class);
+  private static final ITSpringAmqpTracingTestFixture TEST_FIXTURE =
+      new ITSpringAmqpTracingTestFixture(DirectRabbitListenerContainerFactoryConfig.class);
 
   @AfterClass
   public static void tearDown() {

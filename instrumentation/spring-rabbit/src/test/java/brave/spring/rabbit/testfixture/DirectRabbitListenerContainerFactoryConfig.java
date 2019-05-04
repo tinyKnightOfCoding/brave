@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
 public class DirectRabbitListenerContainerFactoryConfig {
 
   @Bean
-  public SpringDirectRabbitListenerContainerFactoryTracing springDirectRabbitListenerContainerFactoryTracing(SpringRabbitTracing springRabbitTracing) {
+  public SpringDirectRabbitListenerContainerFactoryTracing springDirectRabbitListenerContainerFactoryTracing(
+      SpringRabbitTracing springRabbitTracing) {
     return new SpringDirectRabbitListenerContainerFactoryTracing(springRabbitTracing);
   }
 
@@ -25,7 +26,8 @@ public class DirectRabbitListenerContainerFactoryConfig {
     DirectRabbitListenerContainerFactory rabbitListenerContainerFactory =
         new DirectRabbitListenerContainerFactory();
     rabbitListenerContainerFactory.setConnectionFactory(connectionFactory);
-    return springDirectRabbitListenerContainerFactoryTracing.decorateDirectRabbitListenerContainerFactory(rabbitListenerContainerFactory
+    return springDirectRabbitListenerContainerFactoryTracing.decorateDirectRabbitListenerContainerFactory(
+        rabbitListenerContainerFactory
     );
   }
 }
