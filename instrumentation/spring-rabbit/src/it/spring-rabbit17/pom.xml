@@ -74,7 +74,7 @@
         <version>@maven-compiler-plugin.version@</version>
         <configuration>
           <excludes>
-            <!-- excludes all test classes that reference DirectrabbitListenerContainerFactory -->
+            <!-- excludes all test classes that reference DirectRabbitListenerContainerFactory -->
             <exclude>**/SpringRabbitTracing*.java</exclude>
             <exclude>**/ITSpringRabbitTracingWithDirectRabbitListenerContainerFactory*.java</exclude>
             <exclude>**/DirectRabbitListenerContainerFactoryConfig*.java</exclude>
